@@ -6,35 +6,62 @@ namespace SequenceSort
     {
         /// <summary>
         /// Sort a sequence of integers with Insertion sort.
+        /// Theta of n-squared order of growth worst case and Theta of n best case.
         /// </summary>
         /// <param name="sequence"></param>
         /// <param name="sortInDescendingOrder"></param>
-        public static void InsertionSort(this int[] sequence, bool sortInDescendingOrder)
+        public static void InsertionSort(this int[] sequence)
         {
-            Func<int, int, bool> CompareSubArrayItemToKey;
-
-            // Calling this function in iterations allows for optional descending or ascending sorts.
-            if (sortInDescendingOrder)
-            {
-                CompareSubArrayItemToKey = (subArrayItem, key) => subArrayItem < key;
-            }
-            else
-            {
-                CompareSubArrayItemToKey = (subArrayItem, key) => subArrayItem > key;
-            }
-
             // Insertion Sort Algorithm
             for (int i = 1; i < sequence.Length; i++)
             {
                 int key = sequence[i];
                 int subArrayIndex = i - 1;
 
-                while (subArrayIndex > -1 && CompareSubArrayItemToKey(sequence[subArrayIndex],key))
+                while (subArrayIndex > -1 && sequence[subArrayIndex] < key)
                 {
                     sequence[subArrayIndex + 1] = sequence[subArrayIndex];
                     subArrayIndex--;
                 }
                 sequence[subArrayIndex + 1] = key;
+            }
+        }
+
+        /// <summary>
+        /// Sort a sequence of integers with Selection sort.
+        /// Theta of n-squared for best and worst case.
+        /// </summary>
+        /// <param name="sequence"></param>
+        /// <param name="sortInDescendingOrder"></param>
+        public static void SelectionSort(this int[] sequence/*, bool sortInDescendingOrder*/)
+        {
+            //Func<int, int, bool> CompareSubArrayItemToKey;
+
+            // Calling this function in iterations allows for optional descending or ascending sorts.
+            //if (sortInDescendingOrder)
+            //{
+            //    CompareSubArrayItemToKey = (subArrayItem, key) => subArrayItem < key;
+            //}
+            //else
+            //{
+            //    CompareSubArrayItemToKey = (subArrayItem, key) => subArrayItem > key;
+            //}
+
+
+            for (int i = 0; i < sequence.Length; i++)
+            {
+                int min = sequence[i];
+                int k = i;
+                for (int j = i; j < sequence.Length; j++)
+                {
+                    if (min >= sequence[j])
+                    {
+                        k = j;
+                        min = sequence[j];
+                    }
+                }
+                sequence[k] = sequence[i];
+                sequence[i] = min;
             }
         }
 

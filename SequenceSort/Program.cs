@@ -39,10 +39,10 @@ namespace SequenceSort
                                 stopWatch.Start();
 
                                 // Execute Sort
-                                sequence.InsertionSort(false);
+                                sequence.InsertionSort();
 
                                 stopWatch.Stop();
-                                LogSortDetails(sequence, stopWatch.Elapsed, "Insertion Sort ASC");
+                                LogSortDetails(sequence, stopWatch.Elapsed, "Insertion Sort");
                                 break;
 
                             case 2:
@@ -51,10 +51,10 @@ namespace SequenceSort
                                 stopWatch.Start();
 
                                 // Execute Sort
-                                sequence.InsertionSort(true);
+                                sequence.SelectionSort();
 
                                 stopWatch.Stop();
-                                LogSortDetails(sequence, stopWatch.Elapsed, "Insertion Sort DESC");
+                                LogSortDetails(sequence, stopWatch.Elapsed, "Selection Sort");
                                 break;
 
                             // TODO: Implement merge sort.
@@ -86,7 +86,7 @@ namespace SequenceSort
         {
             Console.WriteLine("Please select an option from the list below");
             Console.WriteLine("\tInsertion Sort Ascending:  1");
-            Console.WriteLine("\tInsertion Sort Descending: 2");
+            Console.WriteLine("\tSelection Sort: 2");
             Console.WriteLine("\tClose Project:\t-1");
         }
 
