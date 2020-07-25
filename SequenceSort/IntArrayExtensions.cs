@@ -33,21 +33,8 @@ namespace SequenceSort
         /// </summary>
         /// <param name="sequence"></param>
         /// <param name="sortInDescendingOrder"></param>
-        public static void SelectionSort(this int[] sequence/*, bool sortInDescendingOrder*/)
+        public static void SelectionSort(this int[] sequence)
         {
-            //Func<int, int, bool> CompareSubArrayItemToKey;
-
-            // Calling this function in iterations allows for optional descending or ascending sorts.
-            //if (sortInDescendingOrder)
-            //{
-            //    CompareSubArrayItemToKey = (subArrayItem, key) => subArrayItem < key;
-            //}
-            //else
-            //{
-            //    CompareSubArrayItemToKey = (subArrayItem, key) => subArrayItem > key;
-            //}
-
-
             for (int i = 0; i < sequence.Length; i++)
             {
                 int min = sequence[i];
@@ -63,6 +50,17 @@ namespace SequenceSort
                 sequence[k] = sequence[i];
                 sequence[i] = min;
             }
+        }
+
+        /// <summary>
+        /// Sort a sequence of integers with Selection sort.
+        /// Theta of n-squared for best and worst case.
+        /// </summary>
+        /// <param name="sequence"></param>
+        /// <param name="sortInDescendingOrder"></param>
+        public static void MergeSort(this int[] sequence)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

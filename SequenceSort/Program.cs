@@ -18,7 +18,7 @@ namespace SequenceSort
 
             do
             {
-                AskForUserInput();
+                AskUserForInput();
                 bool validInput = CollectAndValidateUserInput();
                 
                 // TODO: Use Enum instead of 'magic numbers'
@@ -57,7 +57,17 @@ namespace SequenceSort
                                 LogSortDetails(sequence, stopWatch.Elapsed, "Selection Sort");
                                 break;
 
-                            // TODO: Implement merge sort.
+                            case 3:
+                                sequence.PopulateWithRandomValues();
+                                stopWatch.Reset();
+                                stopWatch.Start();
+
+                                // Execute Sort
+                                sequence.MergeSort();
+
+                                stopWatch.Stop();
+                                LogSortDetails(sequence, stopWatch.Elapsed, "Selection Sort");
+                                break;
 
                             default:
                                 throw new ArgumentException("Unhandled user input");
@@ -79,20 +89,20 @@ namespace SequenceSort
 
         public static bool CollectAndValidateUserInput()
         {
-            return int.TryParse(Console.ReadLine(), out userInput) && 1 <= userInput && userInput <= 2 || userInput == -1;
+            return int.TryParse(Console.ReadLine(), out userInput) && 1 <= userInput && userInput <= 3 || userInput == -1;
         }
 
-        public static void AskForUserInput()
+        public static void AskUserForInput()
         {
             Console.WriteLine("Please select an option from the list below");
             Console.WriteLine("\tInsertion Sort Ascending:  1");
             Console.WriteLine("\tSelection Sort: 2");
+            Console.WriteLine("\tMerge Sort: 3");
             Console.WriteLine("\tClose Project:\t-1");
         }
 
         public static void LogException(Exception ex)
         {
-            //Console.Clear();
             Console.WriteLine(ex);
         }
 
