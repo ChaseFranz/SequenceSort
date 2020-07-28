@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 
 namespace SequenceSort
 {
@@ -19,6 +20,23 @@ namespace SequenceSort
                 int subArrayIndex = i - 1;
 
                 while (subArrayIndex > -1 && sequence[subArrayIndex] < key)
+                {
+                    sequence[subArrayIndex + 1] = sequence[subArrayIndex];
+                    subArrayIndex--;
+                }
+                sequence[subArrayIndex + 1] = key;
+            }
+        }
+
+        public static void InsertionSort(this int[] sequence, int p, int q)
+        {
+            // Insertion Sort Algorithm
+            for (int i = p + 1; i < q - p; i++)
+            {
+                int key = sequence[i];
+                int subArrayIndex = i - 1;
+
+                while (subArrayIndex >= p && sequence[subArrayIndex] < key)
                 {
                     sequence[subArrayIndex + 1] = sequence[subArrayIndex];
                     subArrayIndex--;
@@ -53,14 +71,94 @@ namespace SequenceSort
         }
 
         /// <summary>
-        /// Sort a sequence of integers with Selection sort.
-        /// Theta of n-squared for best and worst case.
+        /// Sort a sequence of integers with Merge sort.
         /// </summary>
         /// <param name="sequence"></param>
         /// <param name="sortInDescendingOrder"></param>
-        public static void MergeSort(this int[] sequence)
+        public static void MergeSort(this int[] sequence, bool useInsertionSort)
         {
-            throw new NotImplementedException();
+            if (useInsertionSort)
+            {
+                // TODO: need to make the sorting calibrator a singleton and calibrate when program starts (before the sort method is called)
+                MergeSort(sequence, 0, sequence.Length - 1, new SortingCalibrator());
+            }
+            else
+            {
+                MergeSort(sequence, 0, sequence.Length - 1);
+            }
+        }
+
+        private static void MergeSort(int[] sequence, int p, int r)
+        {
+            if (p < r)
+            {
+                int q = (p + r) / 2;
+                MergeSort(sequence, p, q);
+                MergeSort(sequence, q + 1, r);
+                Merge(sequence, p, q, r);
+            }
+        }
+
+        private static void MergeSort(int[] sequence, int p, int r, SortingCalibrator calibrator)
+        {
+            if(p<r)
+            {
+                if(r-p <= calibrator.K)
+                {
+                    // Using insertion sort on low N values is a faster operation than merge sort.
+                    InsertionSort(sequence, p, r);
+                }
+                else
+                {
+                    int q = (p + r) / 2;
+                    MergeSort(sequence, p, q);
+                    MergeSort(sequence, q + 1, r);
+                    Merge(sequence, p, q, r);
+                }
+            }
+        }
+
+        private static void Merge(int[] sequence, int p, int q, int r)
+        {
+            //Console.WriteLine($"Merge: p:{p} q:{q} r:{r}");
+            int n1 = q - p + 1;
+            int n2 = r - q;
+
+            int[] left = new int[n1 + 1];
+            int[] right = new int[n2 + 1];
+
+            int i;
+            int j;
+
+            for (i=0; i < n1; i++)
+            {
+                left[i] = sequence[p + i];//sequence[p + i - 1];
+            }
+            for (j=0; j < n2; j++)
+            {
+                right[j] = sequence[q + j + 1];//sequence[p + j - 1];
+            }
+
+            // Can't use cardinal values?
+            left[n1] = int.MaxValue;
+            right[n2] = int.MaxValue;
+
+            i = 0;
+            j = 0;
+
+            for(int k = p; k <= r; k++)
+            {
+                if(left[i] <= right[j])
+                {
+                    sequence[k] = left[i];
+                    i++;
+                }
+                else
+                {
+                    sequence[k] = right[j];
+                    j++;
+                }
+            } 
         }
 
         /// <summary>

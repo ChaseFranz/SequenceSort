@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 
 namespace SequenceSort
 {
@@ -10,15 +11,19 @@ namespace SequenceSort
 
         static void Main(string[] args)
         {
-            sequence = new int[5000];
+            //sequence = new int[50000000];
             bool isActive = true;
             Stopwatch stopWatch = new Stopwatch();
 
             Console.WriteLine("SequenceSort: A project by Chase Franz\n");
 
+            SortingCalibrator calibrator = new SortingCalibrator();
+            //calibrator.Calibrate();
+
             do
             {
-                AskUserForInput();
+                AskUserForSequenceSize();
+                AskUserForSortAlgorithmChoice();
                 bool validInput = CollectAndValidateUserInput();
                 
                 // TODO: Use Enum instead of 'magic numbers'
@@ -42,7 +47,7 @@ namespace SequenceSort
                                 sequence.InsertionSort();
 
                                 stopWatch.Stop();
-                                LogSortDetails(sequence, stopWatch.Elapsed, "Insertion Sort");
+                                LogSortDetails(stopWatch.Elapsed, "Insertion Sort");
                                 break;
 
                             case 2:
@@ -54,19 +59,33 @@ namespace SequenceSort
                                 sequence.SelectionSort();
 
                                 stopWatch.Stop();
-                                LogSortDetails(sequence, stopWatch.Elapsed, "Selection Sort");
+                                LogSortDetails(stopWatch.Elapsed, "Selection Sort");
                                 break;
 
                             case 3:
                                 sequence.PopulateWithRandomValues();
+                          
                                 stopWatch.Reset();
                                 stopWatch.Start();
 
                                 // Execute Sort
-                                sequence.MergeSort();
+                                sequence.MergeSort(false);
 
                                 stopWatch.Stop();
-                                LogSortDetails(sequence, stopWatch.Elapsed, "Selection Sort");
+                                LogSortDetails(stopWatch.Elapsed, "Merge Sort");
+                                break;
+
+                            case 4:
+                                sequence.PopulateWithRandomValues();
+
+                                stopWatch.Reset();
+                                stopWatch.Start();
+
+                                // Execute Sort
+                                sequence.MergeSort(true);
+
+                                stopWatch.Stop();
+                                LogSortDetails(stopWatch.Elapsed, "Merge Sort");
                                 break;
 
                             default:
@@ -87,15 +106,27 @@ namespace SequenceSort
             Console.WriteLine("Closing Project...");
         }
 
+        private static void AskUserForSequenceSize()
+        {
+            Console.WriteLine("Please submit a sequence length (N <= ~50000000).");
+            string userInput = Console.ReadLine();
+            bool isValid = int.TryParse(userInput, out int sequenceSize) && 0 <= sequenceSize;// && sequenceSize <= 50000000;
+
+            if(isValid)
+            {
+                sequence = new int[sequenceSize];
+            }
+        }
+
         public static bool CollectAndValidateUserInput()
         {
             return int.TryParse(Console.ReadLine(), out userInput) && 1 <= userInput && userInput <= 3 || userInput == -1;
         }
 
-        public static void AskUserForInput()
+        public static void AskUserForSortAlgorithmChoice()
         {
             Console.WriteLine("Please select an option from the list below");
-            Console.WriteLine("\tInsertion Sort Ascending:  1");
+            Console.WriteLine("\tInsertion Sort:  1");
             Console.WriteLine("\tSelection Sort: 2");
             Console.WriteLine("\tMerge Sort: 3");
             Console.WriteLine("\tClose Project:\t-1");
@@ -119,6 +150,14 @@ namespace SequenceSort
             }
             Console.WriteLine(" }\n");
 
+            Console.WriteLine($"SORT DETAILS");
+            Console.WriteLine($"Sorting Algorithm: {sortName}");
+            Console.WriteLine($"Execution Time: {sortTimeSpan}");
+            Console.WriteLine("\n\n--------------------------------------------------------------------------------------------------\n");
+        }
+
+        public static void LogSortDetails(TimeSpan sortTimeSpan, string sortName)
+        {
             Console.WriteLine($"SORT DETAILS");
             Console.WriteLine($"Sorting Algorithm: {sortName}");
             Console.WriteLine($"Execution Time: {sortTimeSpan}");
